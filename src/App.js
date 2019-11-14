@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { loadModules } from 'esri-loader';
+import axios from 'axios'
 import './App.scss'
 
 const App = () => {
   const mapRef = useRef();
+  const key = "f71397456f83bd9ef4afa2721a6cafb4b3e9d010"
+  const baseUrl = "https://api.census.gov/data/2013/language?get=LANLABEL,LAN7,EST"
 
   useEffect(
     () => {
@@ -15,13 +18,21 @@ const App = () => {
         "esri/widgets/Popup",
         "esri/widgets/LayerList"],
         { css: true })
-        .then(([ArcGISMap, MapView, GeoJSONLayer, PopupTemplate, Popup,
+        .then(([Map, MapView, GeoJSONLayer, PopupTemplate, Popup,
           LayerList]) => {
 
 
           const statesTemplate = new PopupTemplate({
-            content: "hello"
+            title: "{NAME}",
+            content: function (evt) {
+              const state = evt.graphic.attributes.STATE
+              return axios.get(`${baseUrl}&for=state:${state}&key=${key}`).then(res => {
+                console.log(res.data)
+                return `${res.data[2][0]}`
+              })
+            }
           })
+
           const usOutline = new GeoJSONLayer({
             title: "United States",
             url: './us_outline.json'
@@ -29,7 +40,7 @@ const App = () => {
           const usStates = new GeoJSONLayer({
             title: "States",
             url: './us_states.json',
-            PopupTemplate: statesTemplate
+            popupTemplate: statesTemplate
           })
           const usCongressional = new GeoJSONLayer({
             title: "United States Congressional",
@@ -40,7 +51,7 @@ const App = () => {
             url: './us_counties.json'
           })
 
-          const map = new ArcGISMap({
+          const map = new Map({
             basemap: 'gray',
             layers: [usOutline, usStates]
           });
@@ -59,10 +70,6 @@ const App = () => {
 
           view.ui.add(layerList, {
             position: "top-right"
-          })
-
-          view.popup.on('click', function (evt) {
-            console.log(evt)
           })
 
           return () => {
