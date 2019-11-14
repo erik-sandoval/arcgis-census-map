@@ -78,25 +78,33 @@ const App = () => {
 
           const usOutline = new GeoJSONLayer({
             title: "United States",
-            url: './us_outline.json'
+            url: './us_outline.json',
+            maxScale: 6000000
           })
           const usStates = new GeoJSONLayer({
             title: "States",
             url: './us_states.json',
-            popupTemplate: statesTemplate
+            popupTemplate: statesTemplate,
+            maxScale: 9999999
           })
           const usCongressional = new GeoJSONLayer({
             title: "United States Congressional",
-            url: './us_congressional.json'
+            url: './us_congressional.json',
+            popupTemplate: statesTemplate,
+            minScale: 10000000,
+            maxScale: 6000001
+
           })
           const usCounties = new GeoJSONLayer({
             title: "United States Counties",
-            url: './us_counties.json'
+            url: './us_counties.json',
+            popupTemplate: countyTemplate,
+            minScale: 6000000
           })
 
           const map = new Map({
             basemap: 'gray',
-            layers: [usOutline, usStates]
+            layers: [usOutline, usStates, usCongressional, usCounties]
           });
 
           // load the map view at the ref's DOM node
