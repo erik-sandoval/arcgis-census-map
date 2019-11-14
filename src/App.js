@@ -45,7 +45,34 @@ const App = () => {
               return dataPromise
             }
           })
+
+          const countyTemplate = new PopupTemplate({
+            title: "{NAME}",
+            content: function (feature) {
+              const state = feature.graphic.attributes.STATE
+              const county = feature.graphic.attributes.COUNTY
+              const dataPromise = axios.get(`${baseUrl}&for=county:${county}&in=state:${state}&key=${key}`).then(res => {
+                const data = res.data
+
+                if (data) {
+                  return `
+                <table>
+                  <tr>
+                    <th>Language</th>
+                    <th>Estimate</th>
+                  </tr>
+                  ${data.map((censusInfo, i) => (
+                    `${i !== 0 ? `<tr> <td class="label">${censusInfo[0]}</td>
+                  <td>${censusInfo[2]}</td>
+                  </tr>` : ""}`
+                  ))}
+                </table>`
+                } else {
+                  return "No census data to show for {NAME}"
+                }
               })
+
+              return dataPromise
             }
           })
 
