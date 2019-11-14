@@ -15,10 +15,9 @@ const App = () => {
         'esri/views/MapView',
         "esri/layers/GeoJSONLayer",
         "esri/PopupTemplate",
-        "esri/widgets/Popup",
         "esri/widgets/LayerList"],
         { css: true })
-        .then(([Map, MapView, GeoJSONLayer, PopupTemplate, Popup,
+        .then(([Map, MapView, GeoJSONLayer, PopupTemplate,
           LayerList]) => {
 
 

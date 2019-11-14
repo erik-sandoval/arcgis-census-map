@@ -1,3 +1,28 @@
 .webmap {
   height: 100vh;
 }
+
+table {
+  width: 100%;
+
+  td {
+    padding: 15px;
+    width  : 100%;
+
+  }
+
+  tr {
+    &:nth-child(even) {
+      background-color: #dddddddd;
+    }
+  }
+}
+
+.esri-feature__main-container {
+  #text {
+    color  : red;
+    display: none;
+  }
+
+
+}
