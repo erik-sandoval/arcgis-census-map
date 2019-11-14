@@ -133,6 +133,14 @@ const App = () => {
     }
   );
 
-  return <div className="webmap" ref={mapRef} />;
+  return <div>
+    <div className="webmap" ref={mapRef} />
+    <div className="contact-info">
+      <div className="inner-box">
+        <h3>Erik Sandoval</h3>
+        <a href="" target="_blank"><i class="fab fa-github"></i>Github Repo</a>
+      </div>
+    </div>
+  </div>;
 }
 export default App
