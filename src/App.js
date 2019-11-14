@@ -138,7 +138,7 @@ const App = () => {
     <div className="contact-info">
       <div className="inner-box">
         <h3>Erik Sandoval</h3>
-        <a href="" target="_blank"><i class="fab fa-github"></i>Github Repo</a>
+        <a href="https://github.com/erik-sandoval/arcgis-esri" rel="noopener noreferrer" target="_blank"><i class="fab fa-github"></i>Github Repo</a>
       </div>
     </div>
   </div>;
