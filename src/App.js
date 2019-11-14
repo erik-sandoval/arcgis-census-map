@@ -23,11 +23,28 @@ const App = () => {
 
           const statesTemplate = new PopupTemplate({
             title: "{NAME}",
-            content: function (evt) {
-              const state = evt.graphic.attributes.STATE
-              return axios.get(`${baseUrl}&for=state:${state}&key=${key}`).then(res => {
-                console.log(res.data)
-                return `${res.data[2][0]}`
+            content: function (feature) {
+              const state = feature.graphic.attributes.STATE
+              const dataPromise = axios.get(`${baseUrl}&for=state:${state}&key=${key}`).then(res => {
+                const data = res.data
+
+                return `
+                <table>
+                  <tr>
+                    <th>Language</th>
+                    <th>Estimate</th>
+                  </tr>
+                  ${data.map((censusInfo, i) => (
+                  `${i !== 0 ? `<tr> <td class="label">${censusInfo[0]}</td>
+                  <td>${censusInfo[2]}</td>
+                  </tr>` : ""}`
+                ))}
+                </table>`
+              })
+
+              return dataPromise
+            }
+          })
               })
             }
           })
