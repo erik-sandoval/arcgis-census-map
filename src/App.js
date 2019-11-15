@@ -1,14 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { loadModules } from 'esri-loader';
-import axios from 'axios'
 import { statesRender, congressRender, usRender, countyRender } from "./Fill Colors/fillColors"
 import { state, county } from "./Templates/template"
 import './App.scss'
 
 const App = () => {
   const mapRef = useRef();
-  const key = "f71397456f83bd9ef4afa2721a6cafb4b3e9d010"
-  const baseUrl = "https://api.census.gov/data/2013/language?get=LANLABEL,LAN7,EST"
 
   useEffect(
     () => {
