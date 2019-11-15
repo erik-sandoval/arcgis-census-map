@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { loadModules } from 'esri-loader';
 import axios from 'axios'
+import { statesRender, congressRender, usRender, countyRender } from "./Fill Colors/fillColors"
 import { state, county } from "./Templates/template"
 import './App.scss'
 
@@ -28,12 +29,14 @@ const App = () => {
             title: "United States",
             url: './us_outline.json',
             maxScale: 6000000,
+            renderer: usRender
           })
           const usStates = new GeoJSONLayer({
             title: "States",
             url: './us_states.json',
             popupTemplate: statesTemplate,
             maxScale: 9999999,
+            renderer: statesRender
           })
           const usCongressional = new GeoJSONLayer({
             title: "United States Congressional",
@@ -41,6 +44,7 @@ const App = () => {
             popupTemplate: statesTemplate,
             minScale: 10000000,
             maxScale: 6000001,
+            renderer: congressRender
 
           })
           const usCounties = new GeoJSONLayer({
@@ -48,6 +52,7 @@ const App = () => {
             url: './us_counties.json',
             popupTemplate: countyTemplate,
             minScale: 6000000,
+            renderer: countyRender
           })
 
           const map = new Map({
