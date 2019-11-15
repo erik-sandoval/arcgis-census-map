@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { loadModules } from 'esri-loader';
 import axios from 'axios'
+import { state, county } from "./Templates/template"
 import './App.scss'
 
 const App = () => {
@@ -10,7 +11,6 @@ const App = () => {
 
   useEffect(
     () => {
-      // lazy load the required ArcGIS API for JavaScript modules and CSS
       loadModules(['esri/Map',
         'esri/views/MapView',
         "esri/layers/GeoJSONLayer",
@@ -20,86 +20,34 @@ const App = () => {
         .then(([Map, MapView, GeoJSONLayer, PopupTemplate,
           LayerList]) => {
 
+          const statesTemplate = new PopupTemplate(state)
 
-          const statesTemplate = new PopupTemplate({
-            title: "{NAME}",
-            content: function (feature) {
-              const state = feature.graphic.attributes.STATE
-              const dataPromise = axios.get(`${baseUrl}&for=state:${state}&key=${key}`).then(res => {
-                const data = res.data
-
-                return `
-                <table>
-                  <tr>
-                    <th>Language</th>
-                    <th>Estimate</th>
-                  </tr>
-                  ${data.map((censusInfo, i) => (
-                  `${i !== 0 ? `<tr> <td class="label">${censusInfo[0]}</td>
-                  <td>${censusInfo[2]}</td>
-                  </tr>` : ""}`
-                ))}
-                </table>`
-              })
-
-              return dataPromise
-            }
-          })
-
-          const countyTemplate = new PopupTemplate({
-            title: "{NAME}",
-            content: function (feature) {
-              const state = feature.graphic.attributes.STATE
-              const county = feature.graphic.attributes.COUNTY
-              const dataPromise = axios.get(`${baseUrl}&for=county:${county}&in=state:${state}&key=${key}`).then(res => {
-                const data = res.data
-
-                if (data) {
-                  return `
-                <table>
-                  <tr>
-                    <th>Language</th>
-                    <th>Estimate</th>
-                  </tr>
-                  ${data.map((censusInfo, i) => (
-                    `${i !== 0 ? `<tr> <td class="label">${censusInfo[0]}</td>
-                  <td>${censusInfo[2]}</td>
-                  </tr>` : ""}`
-                  ))}
-                </table>`
-                } else {
-                  return "No census data to show for {NAME}"
-                }
-              })
-
-              return dataPromise
-            }
-          })
+          const countyTemplate = new PopupTemplate(county)
 
           const usOutline = new GeoJSONLayer({
             title: "United States",
             url: './us_outline.json',
-            maxScale: 6000000
+            maxScale: 6000000,
           })
           const usStates = new GeoJSONLayer({
             title: "States",
             url: './us_states.json',
             popupTemplate: statesTemplate,
-            maxScale: 9999999
+            maxScale: 9999999,
           })
           const usCongressional = new GeoJSONLayer({
             title: "United States Congressional",
             url: './us_congressional.json',
             popupTemplate: statesTemplate,
             minScale: 10000000,
-            maxScale: 6000001
+            maxScale: 6000001,
 
           })
           const usCounties = new GeoJSONLayer({
             title: "United States Counties",
             url: './us_counties.json',
             popupTemplate: countyTemplate,
-            minScale: 6000000
+            minScale: 6000000,
           })
 
           const map = new Map({
