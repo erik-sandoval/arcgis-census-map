@@ -3,10 +3,12 @@ import axios from 'axios'
 const key = "f71397456f83bd9ef4afa2721a6cafb4b3e9d010"
 const baseUrl = "https://api.census.gov/data/2013/language?get=LANLABEL,LAN7,EST"
 
+// content property uses a function to res
 export const state = {
     title: "{NAME}",
     content: function (feature) {
         const state = feature.graphic.attributes.STATE
+        // returns a table from promise call
         const dataPromise = axios.get(`${baseUrl}&for=state:${state}&key=${key}`).then(res => {
             const data = res.data
 
@@ -23,20 +25,22 @@ export const state = {
             ))}
         </table>`
         })
-
+        // returns promise table to content scope
         return dataPromise
     },
 }
 
 export const county = {
     title: "{NAME}",
+    // content property takes a function with a feature property as a parameter
     content: function (feature) {
         const state = feature.graphic.attributes.STATE
         const county = feature.graphic.attributes.COUNTY
         const dataPromise = axios.get(`${baseUrl}&for=county:${county}&in=state:${state}&key=${key}`).then(res => {
             const data = res.data
-
+            // error handling incase no data is returned
             if (data) {
+                // table if data is returned
                 return `
         <table>
           <tr>
@@ -49,11 +53,12 @@ export const county = {
           </tr>` : ""}`
                 ))}
         </table>`
-            } else {
+            } else { // incase no data is returned
                 return "No census data to show for {NAME}"
             }
         })
 
+        // returning promise value
         return dataPromise
     }
 }

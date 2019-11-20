@@ -1,3 +1,5 @@
+// color properties for layers
+
 export const statesRender = {
     type: "simple",
     symbol: {
